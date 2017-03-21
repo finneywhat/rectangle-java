@@ -1,20 +1,35 @@
-import java.io.Console;
+import java.util.Map;
+import java.util.HashMap;
+import spark.ModelAndView;
+import spark.template.velocity.VelocityTemplateEngine;
+import static spark.Spark.*;
 
 public class App {
   public static void main(String[] args) {
-    Console myConsole = System.console();
-    System.out.println("Enter the length of your rectangle:");
-    String stringLength = myConsole.readLine();
+    staticFileLocation("/public");
+    String layout = "templates/layout.vtl";
 
-    System.out.println("Enter the width of your rectangle:");
-    String stringWidth = myConsole.readLine();
+    get("/", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("template", "templates/index.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
 
-    Rectangle rectangle = new Rectangle(Integer.parseInt(stringLength), Integer.parseInt(stringWidth));
+    get("/rectangle", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      int length = Integer.parseInt(request.queryParams("length"));
+      int width = Integer.parseInt(request.queryParams("width"));
 
-    boolean squareResult = rectangle.isSquare();
-    System.out.println("Is your rectangle a square, too? " + squareResult + "!");
-    int areaResult = rectangle.area();
-    String areaString = String.format("The area is: %d", areaResult);
-    System.out.println(areaString);
+      Rectangle myRectangle = new Rectangle(length, width);
+      model.put("myRectangle", myRectangle);
+
+      if (myRectangle.isSquare()) {
+        Cube myCube = new Cube(myRectangle);
+        model.put("myCube", myCube);
+      }
+
+      model.put("template", "templates/rectangle.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
   }
 }
