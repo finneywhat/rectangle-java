@@ -23,7 +23,7 @@ private int mWidth;
     return mLength == mWidth;
   }
 
-  public int surfaceArea() {
-    return mLength*mWidth;
+  public int area() {
+    return mLength * mWidth;
   }
 }

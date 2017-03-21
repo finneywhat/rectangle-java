@@ -13,7 +13,7 @@ public class App {
 
     boolean squareResult = rectangle.isSquare();
     System.out.println("Is your rectangle a square, too? " + squareResult + "!");
-    int areaResult = rectangle.surfaceArea();
+    int areaResult = rectangle.area();
     String areaString = String.format("The area is: %d", areaResult);
     System.out.println(areaString);
   }
